@@ -1,0 +1,19 @@
+GEO.id,Id
+GEO.id2,Id2
+GEO.display-label,Geography
+HD01_VD01,Estimate; Total:
+HD02_VD01,Margin of Error; Total:
+HD01_VD02,Estimate; Total: - Under .50
+HD02_VD02,Margin of Error; Total: - Under .50
+HD01_VD03,Estimate; Total: - .50 to .99
+HD02_VD03,Margin of Error; Total: - .50 to .99
+HD01_VD04,Estimate; Total: - 1.00 to 1.24
+HD02_VD04,Margin of Error; Total: - 1.00 to 1.24
+HD01_VD05,Estimate; Total: - 1.25 to 1.49
+HD02_VD05,Margin of Error; Total: - 1.25 to 1.49
+HD01_VD06,Estimate; Total: - 1.50 to 1.84
+HD02_VD06,Margin of Error; Total: - 1.50 to 1.84
+HD01_VD07,Estimate; Total: - 1.85 to 1.99
+HD02_VD07,Margin of Error; Total: - 1.85 to 1.99
+HD01_VD08,Estimate; Total: - 2.00 and over
+HD02_VD08,Margin of Error; Total: - 2.00 and over
