@@ -47,20 +47,19 @@ modeldata<-subset(modeldata,pop1k>0)
 
 #Set up function for fixed effects models
 model_fe<-function(chain123) {
-  plm(lag(log(dist_1k),1)~afam_pct+asn_pct+hisp_pct+
-        povpop_pct+hh150k_pct+snap_pct+popden1k,
+  plm(log(dist_1k)~lag(afam_pct,1)+lag(asn_pct,1)+lag(hisp_pct,1)+
+        lag(povpop_pct,1)+lag(hh150k_pct,1)+lag(snap_pct,1)+lag(popden1k,1),
       data=modeldata[modeldata$chain_name==chain123,],
       index=c("tractid","year"))
 }
-
 models<-lapply(chain_select,model_fe)
 
 stargazer(models,title="Fixed effects models",column.labels=chain_select,type="html",out="femodels_result.htm")
 
 #Testing just ACS variables
 model_fe_acs<-function(chain123) {
-  plm(lag(log(dist_1k),1)~afam_pct+asn_pct+hisp_pct+
-        povpop_pct+hh150k_pct,
+  plm(log(dist_1k)~lag(afam_pct,1)+lag(asn_pct,1)+lag(hisp_pct,1)+
+        lag(povpop_pct,1)+lag(hh150k_pct,1),
       data=modeldata[modeldata$chain_name==chain123,],
       index=c("tractid","year"))
 }
