@@ -7,6 +7,6 @@ There are three main analysis files:
 * StoreAnalysis_DemogClusters_tract contains the commands used to create demographic clusters of tracts in our study area and run descriptive analysis on store distance.
 * store_distance_analysis contains commands used for correlation and our fixed effects models.
 
-For our modeling/correlation, the main dataset used was the storedist_tct_data_2017_07_14 csv file.
+For our modeling/correlation, the main dataset used was the storedist_tct_data_2017_07_14 csv file in the Data folder.
 
 For any questions on this project, contact Jerry Shannon at jshannon@uga.edu.
