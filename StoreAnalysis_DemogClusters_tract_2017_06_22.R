@@ -11,9 +11,9 @@ library(tidyverse)
 ###Prepare data
 ###############
 
-tractdata<-read_csv("GAtracts_stcount_atl.csv")
-chaincode<-read_csv("chains_stcode.csv")
-modeldata<-read_csv("storedist_tct_data_2017_07_14.csv")
+tractdata<-read_csv("Data/GAtracts_stcount_atl.csv")
+chaincode<-read_csv("Data/chains_stcode.csv")
+modeldata<-read_csv("Data/storedist_tct_data_2017_07_14.csv")
 
 chain_select<-c("walmart","target","kroger","publix","ingles.mar","dollar.gen","family.dol","shell.food","chevron.fo","cvs.pharma")
 
@@ -138,13 +138,13 @@ tractdata_means_cluster<-left_join(tractdata_means,hc.groups)
 #ggplot(hc.groups,aes(x,y,colour=cluster)) + geom_point()
 tractclusters_shp<-left_join(tracts_ua,tractdata_means_cluster) %>%
   filter(afam_pct>-1)
-st_write(tractclusters_shp,"tractdata_clusters_ua.shp")
+st_write(tractclusters_shp,"Data/tractdata_clusters_ua.shp")
 write_csv(tractdata_means_cluster,"tract_clusters.csv")
 
 ###############
 #Map the clusters
 ##############
-tract_data<-st_read("tractdata_clusters_ua.shp") #Read in the file created in l. 141 to save time
+tract_data<-st_read("Data/tractdata_clusters_ua.shp") #Read in the file created in l. 141 to save time
 tract_data<-tractclusters_shp
 
 #Summarise count and locations of clusters
@@ -152,7 +152,7 @@ table(tract_data$cluster)
 mapview(tract_data,zcol="cluster")
 
 ##Add clusters to the yearly variables
-tractdata_means_cluster<-read_csv("tract_clusters.csv") #If not running analysis from l. 142
+tractdata_means_cluster<-read_csv("Data/tract_clusters.csv") #If not running analysis from l. 142
 tractdata_cluster_mean<-left_join(modeldata,tractdata_means_cluster[,c(3,30)])
 tractdata_cluster_mean$cluster<-as.factor(tractdata_cluster_mean$cluster)
 
@@ -207,7 +207,7 @@ ggsave("Maps figures/chaintrends_ua.pdf")
 ############################
 #Calculating change at tract level
 ###########################
-tractdata_means_cluster<-read_csv("tract_clusters.csv") #If not running analysis from l. 142
+tractdata_means_cluster<-read_csv("Data/tract_clusters.csv") #If not running analysis from l. 142
 modeldata_demog<-left_join(modeldata,tractdata_means_cluster[,c(3,30)])
 modeldata_demog<-subset(modeldata_demog,dist_1k>0)
 modeldata_demog$cluster<-as.factor(modeldata_demog$cluster)
@@ -309,17 +309,17 @@ cluster_counts_wide<-cluster_counts %>%
   unite(var_chain,var,chain_name) %>%
   spread(var_chain,value)
 
-tract_shape<-st_read("tractdata_lmcoef_getisord_2017_07_18.shp")
+tract_shape<-st_read("Data/tractdata_lmcoef_getisord_2017_07_18.shp")
 tract_shape<-left_join(tract_shape,cluster_counts_wide)
 #mapview(tract_shape,zcol="cvs.pharma_estimate")
-st_write(tract_shape,"tractdata_lmcoef_estimates_2017_07_18.shp")
+st_write(tract_shape,"Data/tractdata_lmcoef_estimates_2017_07_18.shp")
 
 
 ################
 # Distance boxplots
 ################
 
-tractdata_cluster_mean<-read_csv("tract_clusters.csv")
+tractdata_cluster_mean<-read_csv("Data/tract_clusters.csv")
 
 tractdata_mean_wide<-modeldata %>%
   mutate(dist1k=dist/1000) %>%
@@ -387,7 +387,7 @@ library(FSA)
 # Calculating change thresholds for demog variables for table of tract change on dependent variables
 ################
 
-modeldata<-read_csv("storedist_tct_data_2017_07_14.csv") %>%
+modeldata<-read_csv("Data/storedist_tct_data_2017_07_14.csv") %>%
   select(-chain_name,-dist,-povpop185_pct,-hh100k_pct,-under18_pct,-totpop_pov,-over64_pct,-c(snap_enroll:popden1k)) %>%
   filter(year=="Y2008" | year=="Y2013")
 

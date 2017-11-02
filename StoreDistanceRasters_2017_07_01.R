@@ -5,7 +5,7 @@ library(nabor)
 
 
 #Read in a list of census blocks
-blocks<-readOGR(".","atl_blocks")
+blocks<-readOGR("Data","atl_blocks")
 blocks<-spTransform(blocks,CRS("+init=epsg:32616 +proj=utm +zone=16 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"))
 
 #Read in a list of shapefiles for retailer locations in each chain in each year

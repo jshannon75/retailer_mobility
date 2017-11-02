@@ -14,9 +14,9 @@ library(Hmisc)
 
 chain_select<-c("walmart","target","kroger","publix","ingles.mar","dollar.gen","family.dol","shell.food","chevron.fo","cvs.pharma")
 
-modeldata<-read_csv("storedist_tct_data_2017_07_14.csv") 
+modeldata<-read_csv("Data/storedist_tct_data_2017_07_14.csv") 
 
-tracts_ua<-st_read("C:/Users/jshannon/Dropbox/Jschool/GIS data/Census/Urban areas_2013","Tract_UA_Atlanta_individual")[,c(1,2,4)]
+tracts_ua<-st_read("Data/Tract_UA_Atlanta_individual.shp")[,c(1,2,4)]
 
 modeldata<-left_join(tracts_ua,modeldata) #Select just tracts in the Atlanta urban area
 st_geometry(modeldata)<-NULL
