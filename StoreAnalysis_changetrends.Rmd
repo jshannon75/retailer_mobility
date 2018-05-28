@@ -1,0 +1,120 @@
+---
+title: "Identifying changes in proximty across the study period"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+```
+
+```{r libraries, warning=FALSE,message=FALSE}
+library(tidyverse)
+library(broom)
+```
+As part of our analysis, we identify tracts where proximity to SNAP authorized retailers changed during our study period. To do so, we smooth the yearly data using OLS regression to identify trends over time.
+
+## Reading data
+First, we read in previously identified tract clusters based on demographics and our model data. We join the tract IDs to our model data. We then select just the D3 variable (distance to 3rd closest store) and change the cluster number format from character to vector.
+
+```{r read data,message=FALSE}
+tractdata_means_cluster<-read_csv("Data/tract_clusters.csv") 
+storedist_modeldata<-read_csv("Data/storedist_modeldata_2018_03_10.csv") %>%
+  mutate(gisjn_tct=paste("G",tract_id,sep=""))
+modeldata_demog<-left_join(storedist_modeldata,tractdata_means_cluster[,c(1,30)]) %>%
+    dplyr::select(-D1,-D2,-D4,-D5)
+modeldata_demog$cluster<-as.factor(modeldata_demog$cluster)
+```
+```{r, echo=FALSE}
+modeldata_demog %>% head() %>% kable()
+```
+
+##Calculating rate of change
+Next, we count the total number of tracts in each cluster, which will be our denominator in calculating the rate of change.
+
+```{r calculate denom, message=FALSE}
+modeldata_tctcnt<-modeldata_demog %>%
+  group_by(gisjn_tct,cluster) %>%
+  summarise() %>%
+  group_by(cluster) %>%
+  summarise(tct_cnt=n())
+```
+
+Next, we use standard deviation to flag tracts with changing proximity over time, stratified by store name. We create a dummy variable that indicates a change.
+
+```{r calculate change}
+modeldata_demog_sd<-modeldata_demog %>%
+  group_by(gisjn_tct,cluster,st_name) %>%
+  summarise(stdev=sd(D3)) 
+
+modeldata_demog_sd$chg<-if_else(modeldata_demog_sd$stdev==0,0,1)
+```
+
+We then join the change dummy variable back to our main dataset. We use the nest function from the tidyverse to collect all tracts within each cluster for each store. We also convert the year variable from character to numeric in order to use it in our models.
+
+```{r nesting, message=FALSE}
+modeldata_demog<-left_join(modeldata_demog,modeldata_demog_sd)
+modeldata_demog$year_num<-as.numeric(substr(modeldata_demog$year,2,5)) #create numeric year variable
+
+cluster_counts<-modeldata_demog %>%
+  filter(chg==1) %>%
+  group_by(st_name,gisjn_tct,cluster) %>%
+  nest()
+```
+
+We then create a function with a simple linear model using years and distance to retailer. We convert the output to columns in our data frame using fit and tidy from the broom package.
+
+```{r modeling, message=FALSE}
+year_lm<-function(df){
+  lm(D3~year_num,data=df)
+}
+
+#Run models and extract coefficient
+cluster_counts<-cluster_counts %>%
+  mutate(fit=map(data,year_lm),
+         tidy=map(fit, broom::tidy)) %>%
+  unnest(tidy)
+```
+```{r, echo=FALSE}
+cluster_counts %>% head() %>% kable()
+```
+
+Based on the output of these models, we then create a categorical variable for change across the study period using the coefficient (the "estimate" variable) from our models. We then count the number of tracts with increases and decreases in store proximity, create columns for each, and join in the total tract count for each cluster.
+
+```{r change tally, message=FALSE}
+#Create dummy variable for increase/decrease
+cluster_counts1<-cluster_counts %>%
+  filter(term=="year_num") %>% 
+  mutate(sign=if_else(estimate>0,"Increase",if_else(estimate<0,"Decrease","zero")))%>%
+  group_by(st_name,cluster,sign) %>%
+  summarise(count=n()) %>%
+  ungroup() %>%
+  spread(sign,count)
+
+cluster_counts1[is.na(cluster_counts1)]<-0
+cluster_counts1<-left_join(cluster_counts1,modeldata_tctcnt)
+```
+```{r, echo=FALSE}
+cluster_counts1 %>% head() %>% kable()
+```
+
+Lastly, we calculate the percentage of tracts in each cluster that have increased or decreased distances to stores across the study period. We also filter the store list to remove broad categories (e.g., convenience store).
+
+```{r}
+#Calculate % of tracts with increase/decrease and plot
+storelist<-read_csv("Data/atl_stlist_30more_2018_03_03.csv") %>%
+  arrange(desc(sttype2)) %>%
+  mutate(st_name=factor(st_name,levels=st_name))
+
+cluster_counts2<-cluster_counts1 %>%
+  mutate(Decrease=Decrease*-1)%>%
+  gather(Decrease:Increase,key="Change",value="value") %>%
+  mutate(pct=round(value/tct_cnt*100,2)) %>%
+  left_join(storelist) %>%
+  filter(sttype2!="Category") %>%
+  dplyr::select(-value) %>%
+  spread(Change,pct)
+```
+```{r, echo=FALSE}
+cluster_counts2 %>% head() %>% kable()
+```

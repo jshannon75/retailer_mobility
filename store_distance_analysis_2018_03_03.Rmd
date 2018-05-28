@@ -1,0 +1,122 @@
+---
+title: "Fixed effects models"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+```
+
+```{r libraries, message=FALSE, warning=FALSE}
+library(sf)
+library(rgdal)
+library(tidyverse)
+library(rgeos)
+library(plm)
+library(stargazer)
+library(spdep)
+library(car)
+library(Hmisc)
+```
+
+In our analysis, we used fixed effects models to identify variables associated with changing proximity to authorized SNAP retailers.
+
+##Reading in the data
+First, we read in the data from our models and the list of all chains included in our analysis.
+
+```{r read model data, message=FALSE}
+storedist_modeldata<-read_csv("Data/storedist_modeldata_2018_03_10.csv") 
+```
+```{r, echo=FALSE}
+storedist_modeldata %>% head() %>% kable()
+```
+
+```{r read chain data, message=FALSE}
+chain_select<-read_csv("Data/atl_stlist_30more_2018_03_03.csv") %>%
+  filter(STTYPE!="Category") %>%
+  dplyr::select(st_name)
+chain_select<-chain_select$st_name
+```
+```{r, echo=FALSE}
+chain_select %>% kable()
+```
+```{r read chain data2, message=FALSE}
+chain_type<-storedist_modeldata %>%
+  select(store,st_name,STTYPE,sttype2) %>%
+  distinct()
+```
+
+```{r, echo=FALSE}
+chain_type %>% head() %>% kable()
+```
+
+##Running the models
+We run separate models for each store chain included in our analysis. To do so, we define a function that can be used to apply our model to data subsetted for each chain. We use the plm package for the fixed effects models, lagging all dependent variables by one year. Our dependent variable is also logged.
+
+We use lapply to apply the model function to each chain on our chain list and then use broom's glance function to extract global diagnostics. The bind_rows function from the tidyverse collapses the output into a single data frame.
+
+```{r models, message=FALSE}
+model_fe_D3<-function(chain123) {
+  plm(log(D3)~lag(afam_pct,1)+lag(asn_pct,1)+lag(hisp_pct,1)+
+        lag(povpop_pct,1)+lag(hh150k_pct,1)+lag(snap_pct,1)+lag(popden1k,1),
+      data=storedist_modeldata[storedist_modeldata$st_name==chain123,],
+      index=c("tract_id","year"))
+}
+
+models.d3<-lapply(chain_select,model_fe_D3)
+models.d3_broom<-lapply(models.d3,broom::glance)
+models.d3_broom_df<-bind_rows(models.d3_broom) %>%
+  mutate(st_name=chain_select,
+         model="D3")
+```
+```{r}
+models.d3_broom_df %>% head() %>% kable()
+```
+
+We can use the tidy function from broom to extract model coefficients for each chain.
+
+```{r model coef, message=FALSE}
+models.d3_tidy<-lapply(models.d3,broom::tidy)
+chain_select_d3<-paste(chain_select) #Add an ID variable
+names(models.d3_tidy)<-chain_select_d3
+models.d3_tidy_df<-bind_rows(models.d3_tidy,.id="store") #Collapse to a single data frame
+```
+```{r}
+models.d3_tidy_df %>% head() %>% kable()
+```
+
+Because our models have so many variables, we visualize model coefficients with the standard error. We set up labels for the independent variables and then prepare the data: filtering for only significant variables and calculating a rough estimate of standard error. We then use ggplot to visualize the variables.
+
+```{r, message=FALSE, warning=FALSE}
+var_labels<-unique(models.d3_tidy_df$term)[1:6]
+var_labels2<-c("% African-American","% Asian-American","% Hispanic","% HH in poverty",
+               "% HH w/$150k income","% w/SNAP")
+labels<-data.frame(var_labels,var_labels2) %>%
+  rename("term"=var_labels)
+
+models_tidy_graph_D3<-models.d3_tidy_df %>%
+  filter(p.value<=0.05)%>%
+  mutate(st_name=factor(store,levels=chain_select),
+         ci_low=estimate-2*std.error, #Can use more complicated t score in the futrue if need be
+         ci_high=estimate+2*std.error) %>%
+  dplyr::select(-statistic,-p.value,-std.error,-store) %>%
+  gather(estimate,ci_low,ci_high,key="pointtype",value="value") %>% 
+  filter(term!="lag(popden1k, 1)") %>%
+  left_join(labels) %>%
+  left_join(chain_type)
+
+cpal<-c("#d7191c", "#d8b365", "#2b83ba") #Colors for store categories
+
+ggplot(models_tidy_graph_D3,aes(y=value,x=reorder(st_name,sttype2),color=sttype2)) +
+  geom_point(data=models_tidy_graph_D3[models_tidy_graph_D3$pointtype=="estimate",],
+             size=1.8)+
+  geom_line(size=0.7)+
+  coord_flip()+
+  theme_minimal()+
+  theme(axis.text.x=element_text(angle=45,hjust=1))+
+  geom_hline(yintercept=0,color="black")+
+  scale_colour_manual(values=cpal)+
+  ylab("Model coefficient and confidence interval")+xlab("")+
+  facet_wrap(~var_labels2,scales="free_y")
+```
