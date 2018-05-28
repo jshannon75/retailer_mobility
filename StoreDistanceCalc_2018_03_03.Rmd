@@ -1,18 +1,157 @@
 ---
-title: "Calculating store distance"
-output:
-  html_document: default
-  html_notebook: default
+title: "Store distance calculation"
+output: github_document
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
-
-```{r}
-plot(cars)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+##Load libraries
+First, we load the libraries we'll be using for this analysis.
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+```{r libraries, message=FALSE, warning=FALSE}
+library(sf)
+library(rgdal)
+library(tidyverse)
+library(nabor)
+library(rgeos)
+```
+
+## Read in the data
+
+We use rgdal to load in the block centroids, as it works better for the distance calculations than sf. This shapefile includes block level population from the 2010 U.S. Census.
+
+```{r read blocks, message=FALSE, warning=FALSE}
+blocks<-readOGR("Data","atl_blocks", verbose=FALSE)
+blocks<-spTransform(blocks,CRS("+init=epsg:32616 +proj=utm +zone=16 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+```
+
+```{r, echo=FALSE}
+plot(blocks)
+```
+
+We also create a data frame of block IDs through the sf package with the same dataset. 
+
+```{r read block df, message=FALSE}
+blocks_sf<-st_read("Data/atl_blocks.shp",quiet=TRUE)
+st_geometry(blocks_sf)<-NULL
+blocks_id<-blocks_sf %>%
+  dplyr::select(GISJOIN, tract_id, Pop2010)
+```
+
+```{r, echo=FALSE}
+blocks_sf %>% head() %>% kable()
+```
+
+Since we create a population weighted mean for census tracts, we also need tract geography.
+
+```{r read tracts, message=FALSE, warning=FALSE}
+tracts_ua<-st_read("Data/Tract_UA_Atlanta_individual.shp")[,c(1,2,4)] %>%
+  mutate(GISJN_TCT=paste("G",tractid,sep=""))
+st_geometry(tracts_ua)<-NULL
+```
+```{r, echo=FALSE}
+tracts_ua %>% head() %>% kable()
+```
+
+
+We also need a list of store names. This list was created in a previous script and shows all chains with >20 locations in all years. We use this list to iterate through the stores while calculating distances.
+
+```{r read stores, message=FALSE}
+storelist<-read_csv("Data/atl_stlist_30more_2018_03_03.csv") %>%
+  filter(sttype2!="Category")
+storelist<-unique(storelist$store)
+```
+```{r, echo=FALSE}
+storelist %>% head() %>% kable()
+```
+
+The last dataset has a list of all individual SNAP retailers in Georgia from 2008-2016. The dplyr command chain below reads those data in and adds a tract id created above. It also creates a long format list of only those stores that are present in a given year and on the list of chain retailers we just read in. Lastly, we remove stores from 2014-2016, as those are outside of our study period.
+
+```{r read store dat, message=FALSE}
+storedata<-read_csv("Data/GA_SNAPstores_2008_2016_GeoID_dummy.csv") %>%
+  right_join(tracts_ua) %>%
+  gather(walmart:big.lots,key="store",value="v") %>%
+  filter(v==1 & store%in%storelist) %>%
+  dplyr::select(-v) %>%
+  gather(Y2008:Y2016,key="year",value="present") %>%
+  filter(year!="Y2014",year!="Y2015",year!="Y2016",present==1)
+```
+```{r, echo=FALSE}
+storedata %>% head() %>% kable()
+```
+
+## Measuring distance
+
+Since we have to iterate across years and store chains in our analysis, we create two functions. The first uses the gDistance function from the rgeos package to measure the Euclidean distance between block centroids and all store locations provided as a parameter for the function. We join these to the data frame of block IDs we read in above, convert the format from wide to long and select the distances to the five closest locations.
+
+```{r distance function, messages=FALSE}
+storeDist<-function(storepoints){
+  knn<-data.frame(t((gDistance(blocks,storepoints,byid=TRUE))))
+  knn_blockid<-cbind(blocks_id,knn)
+  knn_min<-knn_blockid %>%
+    gather(-GISJOIN, -tract_id, -Pop2010, key="store",value="dist") %>% 
+    dplyr::select(-store) %>%
+    group_by(GISJOIN) %>%
+    distinct() %>% #get rid of duplicates/ties
+    top_n(-5) %>% #Change to adjust number of closest stores 
+    arrange(GISJOIN, dist) %>%
+    mutate(rank=c("D1","D2","D3","D4","D5")) #Add titles to identify the rank of each distance (1st closest, etc.)
+  knn_min
+}
+```
+
+Our second function applies the distance function to blocks and stores in each chain. We filter the store list to just locations for a given chain, convert those store locations to points in the correct projection, break those points into a list separated by year, then apply our distance function to measure proximity to chain locations in each year. The remaining lines organize and clean up the results.
+
+```{r storedist2, message=FALSE}
+storeDist_years<-function(storename){
+  store_select<-filter(storedata,store==storename&present==1)
+  store_points<-SpatialPointsDataFrame(store_select[,10:11],store_select,
+                                       proj4string = CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"))
+  store_points1<-spTransform(store_points,CRS("+init=epsg:32616 +proj=utm +zone=16 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+  store_points_list<-split(store_points1,store_points1$year) #Create a list of points in each year
+  store_dist<-lapply(store_points_list,storeDist) #Apply distance function to each year
+  storedist_df<-bind_rows(store_dist,.id="year") #Combine list to df and add column for list name/year
+  storedist_df$store<-storename
+  storedist_df1<-left_join(storedist_df,blocks_id)
+  storedist_df1
+}
+```
+
+We then apply the storeDist_years function to our list of chain names. This line can take a while (~30 min-1 hour), and the result is a list of distances from block centroids to locations for each chain. In our analysis, we end up with approximately 35 million observations. For memory reasons, the command isn't run here, but you can see an example with just Kroger.
+
+```{r calc store dist, message=FALSE}
+#storedist<-lapply(storelist,storeDist_years) #The actual command
+storelist_short<-"kroger"
+storedist<-lapply(storelist_short,storeDist_years)
+storedist_df<-bind_rows(storedist) %>%
+  mutate(dist=dist/1000)
+```
+```{r, echo=FALSE}
+storedist_df %>% head(15) %>% kable()
+```
+
+Once we have distances calculated for block centroids, we create a population weighted mean distance at tract level. The distwgt variable below is that weighted mean
+
+```{r}
+storedist_tct<-storedist_df %>%
+  mutate(popdist=Pop2010*dist) %>%
+  group_by(store,year,rank,tract_id) %>%
+  summarize(popsum=sum(Pop2010),
+            popdistsum=sum(popdist),
+            distwgt=popdistsum/popsum) %>%
+  dplyr::select(-popsum,-popdistsum)
+```
+```{r, echo=FALSE}
+storedist_tct %>% head(15) %>% kable()
+```
+
+These distances can be joined with our tract level independent variables for our descriptive anlaysis and statistical models.
+
+```{r join modeldata, message=FALSE}
+modeldata<-read_csv("Data/storedist_modeldata_2018_03_10.csv") %>%
+  dplyr::select(-D1:-D5) %>%
+  left_join(storedist_tct)
+```

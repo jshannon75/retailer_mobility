@@ -1,0 +1,365 @@
+store,year,count,STTYPE
+aldi,Y2008,21,Supermarket
+aldi,Y2009,23,Supermarket
+aldi,Y2010,25,Supermarket
+aldi,Y2011,26,Supermarket
+aldi,Y2012,30,Supermarket
+aldi,Y2013,30,Supermarket
+aldi,Y2014,33,Supermarket
+aldi,Y2015,37,Supermarket
+aldi,Y2016,39,Supermarket
+bell.s,Y2008,1,Large Grocery Store
+bell.s,Y2009,1,Large Grocery Store
+bell.s,Y2010,1,Large Grocery Store
+bell.s,Y2011,1,Large Grocery Store
+bell.s,Y2012,1,Large Grocery Store
+bell.s,Y2013,1,Large Grocery Store
+bell.s,Y2014,1,Large Grocery Store
+bell.s,Y2015,1,Large Grocery Store
+bell.s,Y2016,1,Large Grocery Store
+big.bear,Y2008,1,Super Store
+big.bear,Y2009,1,Super Store
+big.bear,Y2010,1,Super Store
+big.bear,Y2011,1,Super Store
+big.bear,Y2012,1,Super Store
+big.bear,Y2013,1,Super Store
+big.bear,Y2014,2,Super Store
+big.bear,Y2015,2,Super Store
+big.bear,Y2016,2,Super Store
+big.lots,Y2014,1,Convenience Store
+big.lots,Y2015,24,Convenience Store
+big.lots,Y2016,24,Convenience Store
+bp.food.mart,Y2008,10,Convenience Store
+bp.food.mart,Y2009,13,Convenience Store
+bp.food.mart,Y2010,18,Convenience Store
+bp.food.mart,Y2011,21,Convenience Store
+bp.food.mart,Y2012,25,Convenience Store
+bp.food.mart,Y2013,27,Convenience Store
+bp.food.mart,Y2014,28,Convenience Store
+bp.food.mart,Y2015,27,Convenience Store
+bp.food.mart,Y2016,29,Convenience Store
+chevron.food.mart,Y2008,44,Convenience Store
+chevron.food.mart,Y2009,60,Convenience Store
+chevron.food.mart,Y2010,93,Convenience Store
+chevron.food.mart,Y2011,130,Convenience Store
+chevron.food.mart,Y2012,149,Convenience Store
+chevron.food.mart,Y2013,166,Convenience Store
+chevron.food.mart,Y2014,164,Convenience Store
+chevron.food.mart,Y2015,167,Convenience Store
+chevron.food.mart,Y2016,167,Convenience Store
+circle.k,Y2008,8,Convenience Store
+circle.k,Y2009,8,Convenience Store
+circle.k,Y2010,9,Convenience Store
+circle.k,Y2011,8,Convenience Store
+circle.k,Y2012,8,Convenience Store
+circle.k,Y2013,9,Convenience Store
+circle.k,Y2014,10,Convenience Store
+circle.k,Y2015,12,Convenience Store
+circle.k,Y2016,16,Convenience Store
+citgo.food.mart,Y2008,31,Convenience Store
+citgo.food.mart,Y2009,36,Convenience Store
+citgo.food.mart,Y2010,48,Convenience Store
+citgo.food.mart,Y2011,82,Convenience Store
+citgo.food.mart,Y2012,96,Convenience Store
+citgo.food.mart,Y2013,96,Convenience Store
+citgo.food.mart,Y2014,91,Convenience Store
+citgo.food.mart,Y2015,83,Convenience Store
+citgo.food.mart,Y2016,80,Convenience Store
+costco,Y2010,7,Super Store
+costco,Y2011,8,Super Store
+costco,Y2012,8,Super Store
+costco,Y2013,8,Super Store
+costco,Y2014,8,Super Store
+costco,Y2015,9,Super Store
+costco,Y2016,9,Super Store
+cvs.pharmacy,Y2008,89,Combination Grocery/Other
+cvs.pharmacy,Y2009,91,Combination Grocery/Other
+cvs.pharmacy,Y2010,117,Combination Grocery/Other
+cvs.pharmacy,Y2011,137,Combination Grocery/Other
+cvs.pharmacy,Y2012,158,Combination Grocery/Other
+cvs.pharmacy,Y2013,162,Combination Grocery/Other
+cvs.pharmacy,Y2014,160,Combination Grocery/Other
+cvs.pharmacy,Y2015,152,Combination Grocery/Other
+cvs.pharmacy,Y2016,149,Combination Grocery/Other
+dollar.general,Y2008,103,Combination Grocery/Other
+dollar.general,Y2009,104,Combination Grocery/Other
+dollar.general,Y2010,114,Combination Grocery/Other
+dollar.general,Y2011,121,Combination Grocery/Other
+dollar.general,Y2012,128,Combination Grocery/Other
+dollar.general,Y2013,134,Combination Grocery/Other
+dollar.general,Y2014,140,Combination Grocery/Other
+dollar.general,Y2015,145,Combination Grocery/Other
+dollar.general,Y2016,150,Combination Grocery/Other
+dollar.tree,Y2008,24,Combination Grocery/Other
+dollar.tree,Y2009,46,Combination Grocery/Other
+dollar.tree,Y2010,59,Combination Grocery/Other
+dollar.tree,Y2011,65,Combination Grocery/Other
+dollar.tree,Y2012,71,Combination Grocery/Other
+dollar.tree,Y2013,77,Combination Grocery/Other
+dollar.tree,Y2014,82,Combination Grocery/Other
+dollar.tree,Y2015,90,Combination Grocery/Other
+dollar.tree,Y2016,94,Combination Grocery/Other
+exxon.food.mart,Y2008,8,Convenience Store
+exxon.food.mart,Y2009,14,Convenience Store
+exxon.food.mart,Y2010,28,Convenience Store
+exxon.food.mart,Y2011,41,Convenience Store
+exxon.food.mart,Y2012,44,Convenience Store
+exxon.food.mart,Y2013,47,Convenience Store
+exxon.food.mart,Y2014,46,Convenience Store
+exxon.food.mart,Y2015,45,Convenience Store
+exxon.food.mart,Y2016,51,Convenience Store
+family.dollar.store,Y2008,83,Combination Grocery/Other
+family.dollar.store,Y2009,104,Combination Grocery/Other
+family.dollar.store,Y2010,110,Combination Grocery/Other
+family.dollar.store,Y2011,118,Combination Grocery/Other
+family.dollar.store,Y2012,130,Combination Grocery/Other
+family.dollar.store,Y2013,140,Combination Grocery/Other
+family.dollar.store,Y2014,148,Combination Grocery/Other
+family.dollar.store,Y2015,153,Combination Grocery/Other
+family.dollar.store,Y2016,145,Combination Grocery/Other
+flash.foods.llc,Y2008,9,Convenience Store
+flash.foods.llc,Y2009,11,Convenience Store
+flash.foods.llc,Y2010,10,Convenience Store
+flash.foods.llc,Y2011,11,Convenience Store
+flash.foods.llc,Y2012,11,Convenience Store
+flash.foods.llc,Y2013,11,Convenience Store
+flash.foods.llc,Y2014,11,Convenience Store
+flash.foods.llc,Y2015,11,Convenience Store
+flash.foods.llc,Y2016,11,Convenience Store
+food.depot,Y2008,23,Supermarket
+food.depot,Y2009,23,Supermarket
+food.depot,Y2010,23,Supermarket
+food.depot,Y2011,22,Supermarket
+food.depot,Y2012,24,Supermarket
+food.depot,Y2013,25,Supermarket
+food.depot,Y2014,27,Supermarket
+food.depot,Y2015,27,Supermarket
+food.depot,Y2016,30,Supermarket
+food.lion,Y2009,3,Supermarket
+food.lion,Y2010,9,Supermarket
+food.lion,Y2011,11,Supermarket
+food.lion,Y2012,1,Supermarket
+food.lion,Y2013,1,Supermarket
+food.lion,Y2014,1,Supermarket
+freds.store,Y2008,16,Combination Grocery/Other
+freds.store,Y2009,15,Combination Grocery/Other
+freds.store,Y2010,13,Combination Grocery/Other
+freds.store,Y2011,10,Combination Grocery/Other
+freds.store,Y2012,10,Combination Grocery/Other
+freds.store,Y2013,10,Combination Grocery/Other
+freds.store,Y2014,9,Combination Grocery/Other
+freds.store,Y2015,4,Combination Grocery/Other
+freds.store,Y2016,4,Combination Grocery/Other
+iga,Y2008,1,Super Store
+iga,Y2009,1,Super Store
+iga,Y2010,1,Super Store
+iga,Y2011,1,Super Store
+iga,Y2012,1,Super Store
+iga,Y2013,1,Super Store
+iga,Y2014,1,Super Store
+iga,Y2015,1,Super Store
+iga,Y2016,1,Super Store
+ingles.markets,Y2008,38,Supermarket
+ingles.markets,Y2009,38,Supermarket
+ingles.markets,Y2010,33,Supermarket
+ingles.markets,Y2011,34,Supermarket
+ingles.markets,Y2012,33,Supermarket
+ingles.markets,Y2013,31,Supermarket
+ingles.markets,Y2014,31,Supermarket
+ingles.markets,Y2015,28,Supermarket
+ingles.markets,Y2016,28,Supermarket
+kmart,Y2008,13,Super Store
+kmart,Y2009,13,Super Store
+kmart,Y2010,11,Super Store
+kmart,Y2011,11,Super Store
+kmart,Y2012,12,Super Store
+kmart,Y2013,11,Super Store
+kmart,Y2014,4,Super Store
+kmart,Y2015,4,Super Store
+kmart,Y2016,4,Super Store
+kroger,Y2008,133,Super Store
+kroger,Y2009,134,Super Store
+kroger,Y2010,129,Super Store
+kroger,Y2011,128,Super Store
+kroger,Y2012,128,Super Store
+kroger,Y2013,124,Super Store
+kroger,Y2014,124,Super Store
+kroger,Y2015,123,Super Store
+kroger,Y2016,124,Super Store
+mapco.express,Y2011,1,Convenience Store
+mapco.express,Y2012,1,Convenience Store
+mapco.express,Y2013,1,Convenience Store
+mapco.express,Y2014,1,Convenience Store
+mapco.express,Y2015,1,Convenience Store
+mapco.express,Y2016,1,Convenience Store
+one.stop,Y2008,1,Convenience Store
+one.stop,Y2009,2,Convenience Store
+one.stop,Y2010,4,Convenience Store
+one.stop,Y2011,6,Convenience Store
+one.stop,Y2012,7,Convenience Store
+one.stop,Y2013,5,Convenience Store
+one.stop,Y2014,9,Convenience Store
+one.stop,Y2015,8,Convenience Store
+one.stop,Y2016,8,Convenience Store
+piggly.wiggly,Y2008,5,Large Grocery Store
+piggly.wiggly,Y2009,6,Large Grocery Store
+piggly.wiggly,Y2010,6,Large Grocery Store
+piggly.wiggly,Y2011,6,Large Grocery Store
+piggly.wiggly,Y2012,6,Large Grocery Store
+piggly.wiggly,Y2013,6,Large Grocery Store
+piggly.wiggly,Y2014,9,Large Grocery Store
+piggly.wiggly,Y2015,9,Large Grocery Store
+piggly.wiggly,Y2016,9,Large Grocery Store
+publix,Y2008,144,Supermarket
+publix,Y2009,148,Supermarket
+publix,Y2010,150,Supermarket
+publix,Y2011,150,Supermarket
+publix,Y2012,146,Supermarket
+publix,Y2013,140,Supermarket
+publix,Y2014,139,Supermarket
+publix,Y2015,138,Supermarket
+publix,Y2016,137,Supermarket
+quick.mart,Y2008,6,Convenience Store
+quick.mart,Y2009,9,Convenience Store
+quick.mart,Y2010,15,Convenience Store
+quick.mart,Y2011,18,Convenience Store
+quick.mart,Y2012,20,Convenience Store
+quick.mart,Y2013,22,Convenience Store
+quick.mart,Y2014,17,Convenience Store
+quick.mart,Y2015,17,Convenience Store
+quick.mart,Y2016,18,Convenience Store
+quick.stop,Y2008,13,Convenience Store
+quick.stop,Y2009,15,Convenience Store
+quick.stop,Y2010,19,Convenience Store
+quick.stop,Y2011,24,Convenience Store
+quick.stop,Y2012,27,Convenience Store
+quick.stop,Y2013,26,Convenience Store
+quick.stop,Y2014,26,Convenience Store
+quick.stop,Y2015,30,Convenience Store
+quick.stop,Y2016,27,Convenience Store
+quiktrip,Y2008,39,Convenience Store
+quiktrip,Y2009,38,Convenience Store
+quiktrip,Y2010,38,Convenience Store
+quiktrip,Y2011,111,Convenience Store
+quiktrip,Y2012,113,Convenience Store
+quiktrip,Y2013,116,Convenience Store
+quiktrip,Y2014,118,Convenience Store
+quiktrip,Y2015,118,Convenience Store
+quiktrip,Y2016,121,Convenience Store
+race.trac,Y2011,35,Combination Grocery/Other
+race.trac,Y2012,49,Combination Grocery/Other
+race.trac,Y2013,54,Combination Grocery/Other
+race.trac,Y2014,59,Combination Grocery/Other
+race.trac,Y2015,60,Combination Grocery/Other
+race.trac,Y2016,62,Combination Grocery/Other
+rite.aid..rite.aid..,Y2008,90,Combination Grocery/Other
+rite.aid..rite.aid..,Y2009,91,Combination Grocery/Other
+rite.aid..rite.aid..,Y2010,95,Combination Grocery/Other
+rite.aid..rite.aid..,Y2011,94,Combination Grocery/Other
+rite.aid..rite.aid..,Y2012,94,Combination Grocery/Other
+rite.aid..rite.aid..,Y2013,94,Combination Grocery/Other
+rite.aid..rite.aid..,Y2014,94,Combination Grocery/Other
+rite.aid..rite.aid..,Y2015,88,Combination Grocery/Other
+rite.aid..rite.aid..,Y2016,85,Combination Grocery/Other
+sam.s.club,Y2009,12,Super Store
+sam.s.club,Y2010,12,Super Store
+sam.s.club,Y2011,13,Super Store
+sam.s.club,Y2012,13,Super Store
+sam.s.club,Y2013,13,Super Store
+sam.s.club,Y2014,13,Super Store
+sam.s.club,Y2015,13,Super Store
+sam.s.club,Y2016,14,Super Store
+save.a.lot,Y2008,5,Supermarket
+save.a.lot,Y2009,5,Supermarket
+save.a.lot,Y2010,5,Supermarket
+save.a.lot,Y2011,7,Supermarket
+save.a.lot,Y2012,8,Supermarket
+save.a.lot,Y2013,8,Supermarket
+save.a.lot,Y2014,8,Supermarket
+save.a.lot,Y2015,5,Supermarket
+save.a.lot,Y2016,5,Supermarket
+shell.food.mart,Y2008,25,Convenience Store
+shell.food.mart,Y2009,42,Convenience Store
+shell.food.mart,Y2010,99,Convenience Store
+shell.food.mart,Y2011,139,Convenience Store
+shell.food.mart,Y2012,162,Convenience Store
+shell.food.mart,Y2013,172,Convenience Store
+shell.food.mart,Y2014,171,Convenience Store
+shell.food.mart,Y2015,163,Convenience Store
+shell.food.mart,Y2016,162,Convenience Store
+target,Y2008,36,Super Store
+target,Y2009,41,Super Store
+target,Y2010,41,Super Store
+target,Y2011,40,Super Store
+target,Y2012,40,Super Store
+target,Y2013,40,Super Store
+target,Y2014,38,Super Store
+target,Y2015,37,Super Store
+target,Y2016,37,Super Store
+texaco.food.mart,Y2008,22,Convenience Store
+texaco.food.mart,Y2009,22,Convenience Store
+texaco.food.mart,Y2010,46,Convenience Store
+texaco.food.mart,Y2011,64,Convenience Store
+texaco.food.mart,Y2012,68,Convenience Store
+texaco.food.mart,Y2013,73,Convenience Store
+texaco.food.mart,Y2014,78,Convenience Store
+texaco.food.mart,Y2015,86,Convenience Store
+texaco.food.mart,Y2016,83,Convenience Store
+the.fresh.market,Y2013,7,Supermarket
+the.fresh.market,Y2014,7,Supermarket
+the.fresh.market,Y2015,8,Supermarket
+the.fresh.market,Y2016,10,Supermarket
+trader.joe,Y2008,5,Supermarket
+trader.joe,Y2009,6,Supermarket
+trader.joe,Y2010,6,Supermarket
+trader.joe,Y2011,6,Supermarket
+trader.joe,Y2012,6,Supermarket
+trader.joe,Y2013,6,Supermarket
+trader.joe,Y2014,6,Supermarket
+trader.joe,Y2015,6,Supermarket
+trader.joe,Y2016,6,Supermarket
+walgreen.s.,Y2008,58,Combination Grocery/Other
+walgreen.s.,Y2009,85,Combination Grocery/Other
+walgreen.s.,Y2010,111,Combination Grocery/Other
+walgreen.s.,Y2011,110,Combination Grocery/Other
+walgreen.s.,Y2012,112,Combination Grocery/Other
+walgreen.s.,Y2013,113,Combination Grocery/Other
+walgreen.s.,Y2014,113,Combination Grocery/Other
+walgreen.s.,Y2015,111,Combination Grocery/Other
+walgreen.s.,Y2016,111,Combination Grocery/Other
+walmart,Y2008,56,Super Store
+walmart,Y2009,57,Super Store
+walmart,Y2010,57,Super Store
+walmart,Y2011,58,Super Store
+walmart,Y2012,60,Super Store
+walmart,Y2013,67,Super Store
+walmart,Y2014,74,Super Store
+walmart,Y2015,76,Super Store
+walmart,Y2016,76,Super Store
+wayfield,Y2008,12,Super Store
+wayfield,Y2009,12,Super Store
+wayfield,Y2010,12,Super Store
+wayfield,Y2011,9,Super Store
+wayfield,Y2012,11,Super Store
+wayfield,Y2013,9,Super Store
+wayfield,Y2014,9,Super Store
+wayfield,Y2015,10,Super Store
+wayfield,Y2016,10,Super Store
+whole.foods,Y2008,5,Super Store
+whole.foods,Y2009,5,Super Store
+whole.foods,Y2010,5,Super Store
+whole.foods,Y2011,5,Super Store
+whole.foods,Y2012,6,Super Store
+whole.foods,Y2013,6,Super Store
+whole.foods,Y2014,6,Super Store
+whole.foods,Y2015,7,Super Store
+whole.foods,Y2016,8,Super Store
+wholesale,Y2008,1,Super Store
+wholesale,Y2009,1,Super Store
+wholesale,Y2010,9,Super Store
+wholesale,Y2011,11,Super Store
+wholesale,Y2012,11,Super Store
+wholesale,Y2013,10,Super Store
+wholesale,Y2014,10,Super Store
+wholesale,Y2015,9,Super Store
+wholesale,Y2016,10,Super Store

@@ -9,6 +9,4 @@ There are three main analysis files:
 
 For our modeling/correlation, the main dataset used was the storedist_tct_data_2017_07_14 csv file in the Data folder.
 
-[Test link](https://rawgit.com/jshannon75/retailer_mobility/raw/master/StoreDistanceCalc_2018_03_03.html)
-
 For any questions on this project, contact Jerry Shannon at jshannon@uga.edu.

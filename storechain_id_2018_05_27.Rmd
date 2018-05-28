@@ -1,0 +1,77 @@
+---
+title: "Identifying store chains"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+```
+
+```{r load packages,message=FALSE,warning=FALSE}
+library(tidyverse)
+library(sf)
+```
+
+## Loading data
+We start by loading tracts, particularly a dummy variable that shows whether a tract is in the Atlanta urbanized area.
+
+```{r tract load}
+tracts_ua<-st_read("Data/Tract_UA_Atlanta_individual.shp", quiet=TRUE)[,c(1,2,4)] %>%
+  mutate(GISJN_TCT=paste("G",tractid,sep=""))
+st_geometry(tracts_ua)<-NULL
+```
+
+Then we also load our store data and join the tract data
+
+```{r store load,message=FALSE}
+storedata<-read_csv("Data/GA_SNAPstores_2008_2016_GeoID_dummy.csv") %>%
+  right_join(tracts_ua) 
+```
+
+##Working with the data
+
+We convert the store data to long format and just select stores present in each year.
+
+```{r filter data}
+storedata_long<-storedata %>%
+  gather(Y2008:Y2016,key="year",value="st_value") %>%
+  gather(walmart:big.lots,key="store",value="value") %>%
+  filter(value==1,st_value==1) %>%
+  select(-value,-st_value)
+```
+```{r, echo=FALSE}
+storedata_long %>% head() %>% kable()
+```
+
+Some SNAP retailers are classified in different ways across years. We identify chain type by the most common classification as shown below.
+
+```{r store class}
+storedata_type<-storedata_long %>%
+  group_by(store,STTYPE) %>%
+  summarise(count=n()) %>%
+  ungroup()%>%
+  group_by(store) %>%
+  filter(count==max(count)) %>%
+  select(-count)
+```
+```{r, echo=FALSE}
+storedata_type %>% head() %>% kable()
+```
+
+Lastly, we create a count of stores in each year and look at the minimum values. We select just those store with a minimum of 20 or more.
+
+```{r}
+atl_stcount<-storedata_long %>%
+  group_by(store,year) %>%
+  summarise(count=n()) %>%
+  ungroup() %>%
+  group_by(store) %>%
+  summarise(min=min(count)) %>%
+  filter(min>19) %>%
+  left_join(storedata_type) %>%
+  arrange(STTYPE,desc(min))
+```
+```{r, echo=FALSE}
+atl_stcount %>% kable()
+```

@@ -1,0 +1,67 @@
+---
+output:
+  pdf_document: default
+  word_document: default
+classoption: landscape,a2paper
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(plm)
+library(stargazer)
+storedist_modeldata<-read_csv("storedist_modeldata_2018_03_10.csv") 
+chain_select<-unique(storedist_modeldata$st_name)
+chain_display<-chain_select[c(-4,-5,-14)]
+
+model_fe_D1<-function(chain123,dv) {
+  plm(log(D1)~lag(afam_pct,1)+lag(asn_pct,1)+lag(hisp_pct,1)+
+        lag(povpop_pct,1)+lag(hh150k_pct,1)+lag(snap_pct,1)+lag(popden1k,1),
+      data=storedist_modeldata[storedist_modeldata$st_name==chain123,],
+      index=c("tract_id","year"))}
+models.d1.display<-lapply(chain_display,model_fe_D1)
+
+model_fe_D2<-function(chain123,dv) {
+  plm(log(D2)~lag(afam_pct,1)+lag(asn_pct,1)+lag(hisp_pct,1)+
+        lag(povpop_pct,1)+lag(hh150k_pct,1)+lag(snap_pct,1)+lag(popden1k,1),
+      data=storedist_modeldata[storedist_modeldata$st_name==chain123,],
+      index=c("tract_id","year"))}
+models.D2.display<-lapply(chain_display,model_fe_D2)
+
+model_fe_D3<-function(chain123,dv) {
+  plm(log(D3)~lag(afam_pct,1)+lag(asn_pct,1)+lag(hisp_pct,1)+
+        lag(povpop_pct,1)+lag(hh150k_pct,1)+lag(snap_pct,1)+lag(popden1k,1),
+      data=storedist_modeldata[storedist_modeldata$st_name==chain123,],
+      index=c("tract_id","year"))}
+models.D3.display<-lapply(chain_display,model_fe_D3)
+
+model_fe_D4<-function(chain123,dv) {
+  plm(log(D4)~lag(afam_pct,1)+lag(asn_pct,1)+lag(hisp_pct,1)+
+        lag(povpop_pct,1)+lag(hh150k_pct,1)+lag(snap_pct,1)+lag(popden1k,1),
+      data=storedist_modeldata[storedist_modeldata$st_name==chain123,],
+      index=c("tract_id","year"))}
+models.D4.display<-lapply(chain_display,model_fe_D4)
+
+model_fe_D5<-function(chain123,dv) {
+  plm(log(D5)~lag(afam_pct,1)+lag(asn_pct,1)+lag(hisp_pct,1)+
+        lag(povpop_pct,1)+lag(hh150k_pct,1)+lag(snap_pct,1)+lag(popden1k,1),
+      data=storedist_modeldata[storedist_modeldata$st_name==chain123,],
+      index=c("tract_id","year"))}
+models.D5.display<-lapply(chain_display,model_fe_D5)
+```
+
+```{r echo=FALSE, results='asis'}
+stargazer(models.d1.display,dep.var.caption="Fixed effects models:D1",column.labels=chain_display,
+          column.sep.width="1pt",omit.stat = "f", star.cutoffs = c(0.05, 0.01, 0.001))
+
+stargazer(models.D2.display,dep.var.caption="Fixed effects models:D2",column.labels=chain_display,
+          column.sep.width="1pt",omit.stat = "f", star.cutoffs = c(0.05, 0.01, 0.001))
+
+stargazer(models.D3.display,dep.var.caption="Fixed effects models:D3",column.labels=chain_display,
+          column.sep.width="1pt",omit.stat = "f", star.cutoffs = c(0.05, 0.01, 0.001))
+
+stargazer(models.D4.display,dep.var.caption="Fixed effects models:D4",column.labels=chain_display,
+          column.sep.width="1pt",omit.stat = "f", star.cutoffs = c(0.05, 0.01, 0.001))
+
+stargazer(models.D5.display,dep.var.caption="Fixed effects models:D5",column.labels=chain_display,
+          column.sep.width="1pt",omit.stat = "f", star.cutoffs = c(0.05, 0.01, 0.001))

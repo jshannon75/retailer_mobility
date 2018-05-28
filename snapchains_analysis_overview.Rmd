@@ -1,0 +1,21 @@
+---
+title: "Untitled"
+author: "Jerry Shannon"
+date: "March 5, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Store models
+
+This project contains scripts and data to analyze SNAP store distribution in Atlanta from 2008-2013. The following scripts are used:
+
+*storevariation_2018_02_24: Reads in store data and identifies chains with >30 stores in the metro at some point. 
+*StoreDistanceCalc_2018_03_03: Calculates weighted population mean of block distance to each identified chain at tract level. It does this for the stores identified in the store variation script plus all stores in each of the three analytical categories (Large retailers, convenience stores, combo stores). Distances to the 1st through 5th closest stores are calculated. In the future, may adapt this to look at network distance using the igraph package with osm data.
+*store_distance_analysis_2018_03_03: Runs fixed effects models for identified chains and store types and graphs results.
+*StoreAnalysis_DemogClusters_tract_2017_06_22: Creates demographic clusters using census data, visualizes the characteristics of each cluster, and analyzes the distribution of select chains within clusters. Also other diagnostic tests (may have been overkill...)
+*stores_map_2018_03_03: Creates a small multiples map showing current store distribution and change over the study period.
+

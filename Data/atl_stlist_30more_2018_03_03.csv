@@ -1,0 +1,24 @@
+store,st_name,STTYPE,sttype2
+Large retailer,Large retailer,Category,Category
+Convenience store,Convenience store,Category,Category
+Combination,Combination,Category,Category
+cvs.pharmacy,CVS,Combination Grocery/Other,Combination
+dollar.general,Dollar General,Combination Grocery/Other,Combination
+dollar.tree,Dollar Tree,Combination Grocery/Other,Combination
+family.dollar.store,Family Dollar,Combination Grocery/Other,Combination
+rite.aid..rite.aid..,RiteAid,Combination Grocery/Other,Combination
+walgreen.s.,Walgreens,Combination Grocery/Other,Combination
+chevron.food.mart,Chevron ,Convenience Store,Convenience store
+citgo.food.mart,Citgo,Convenience Store,Convenience store
+exxon.food.mart,Exxon,Convenience Store,Convenience store
+quick.stop,Quick Stop,Convenience Store,Convenience store
+quiktrip,QuickTrip,Convenience Store,Convenience store
+shell.food.mart,Shell,Convenience Store,Convenience store
+texaco.food.mart,Texaco,Convenience Store,Convenience store
+kroger,Kroger,Super Store,Large retailer
+target,Target,Super Store,Large retailer
+walmart,Walmart,Super Store,Large retailer
+aldi,Aldi,Supermarket,Large retailer
+food.depot,Food Depot,Supermarket,Large retailer
+ingles.markets,Ingles,Supermarket,Large retailer
+publix,Publix,Supermarket,Large retailer

@@ -1,0 +1,138 @@
+---
+title: "Cluster based analysis of tracts in the Atlanta metro"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+```
+
+```{r libraries, message=FALSE, warning=FALSE}
+library(sf)
+library(spdep)
+library(rgdal)
+library(tidyverse)
+library(tmap)
+```
+
+## Read data
+
+First, we read in the data use in our models. This includes the demographic and food environment variables for each year. 
+
+```{r read model data, message=FALSE}
+storedist_modeldata<-read_csv("Data/storedist_modeldata_2018_03_10.csv") 
+```
+
+```{r, echo=FALSE}
+storedist_modeldata %>% head() %>% kable()
+```
+
+We then create a list of chain names from the model data.
+
+```{r read store data, message=FALSE}
+storelist<-read_csv("Data/atl_stlist_30more_2018_03_03.csv") %>%
+  arrange(desc(sttype2)) %>%
+  mutate(st_name=factor(st_name,levels=st_name))
+```
+
+```{r, echo=FALSE}
+storelist %>% head() %>% kable()
+```
+
+##Setting other parameters
+
+The code below sets some global parameters for the analysis and plotting.
+
+```{r parameters}
+#Colors for the three main chain types
+cpal<-c("#d7191c", "#d8b365", "#2b83ba")
+
+#Cluster colors
+cluster_color<-c("1"="#C8AF8A","2"="#658385","3"="#F6BE41","4"="#A3739E","5"="#B04838","6"="#1f78b4")
+
+#Names of variables
+variable_names<-c(
+  'afam_pct'="% African-American",
+  'asn_pct'="% Asian-American",
+  'hisp_pct'="% Hispanic",
+  'hh150k_pct'="% hh w/income >$150k",
+  'povpop_pct'="% hh in poverty",
+  'snap_pct'="% enrolled in SNAP",
+  'totpop_pov'="Total population",
+  'popden1k'="Pop. density (1,000 per sq. mile)"
+)
+
+var_labeller <- function(variable,value){
+  return(variable_names[value])
+}
+```
+
+##Collapsing the data across years
+
+To complete the cluster analysis, we calculate the mean value of the independent model variables across years.
+
+```{r mean model vars}
+modeldata_mean <- storedist_modeldata %>%
+  gather(totpop_pov:snap_pct,key="var",value="value") %>%
+  group_by(tract_id,var) %>%
+  summarise(mean=mean(value)) %>%
+  spread(var,mean) %>%
+  ungroup()
+```
+
+```{r, echo=FALSE}
+modeldata_mean %>% head() %>% kable()
+```
+
+##Creating clusters
+
+First, we select just the demographic variables.
+
+```{r select vars}
+tract.x<-modeldata_mean %>%
+  dplyr::select(afam_pct,asn_pct,hisp_pct,hh150k_pct,povpop_pct,snap_pct,popden1k) %>%
+  distinct()
+```
+
+Then we create a distance matrix between tracts. To allow for clustering, tracts with identical values are set at a distance of 1.
+
+```{r dist matrix}
+tract.dist<-dist(tract.x)
+tract.dist[tract.dist==0]<-1
+```
+
+We use the hclust function to do hierarchical clustering analysis using the calculated distances. Based on our output, we identified six distinct clusters within these data, and these are shown on the output below.
+
+```{r hclust}
+hc<-hclust(tract.dist, method="ward.D")
+plot(hc)
+group_num<-6
+rect.hclust(hc,k=group_num,border="red")
+```
+
+Once identified, we create a list of tracts in each group (hc.groups). These are joined back to the main dataset.
+
+```{r cluster id}
+hc.groups<-data.frame(cutree(hc,k=group_num))
+names(hc.groups)<-"cluster"
+hc.groups <- hc.groups %>%
+  mutate(cluster=as.factor(hc.groups$cluster),
+         tract_id=modeldata_mean$tract_id)
+tractdata_means_cluster<-left_join(modeldata_mean,hc.groups)
+```
+```{r, echo=FALSE}
+tractdata_means_cluster %>% head() %>% kable()
+```
+
+##Mapping the clusters
+
+We can map these clusters using a tract shapefile. Further visualization can explore change in variables in the model data file across years, which is shown in our publication.
+
+```{r}
+tract_map<-st_read("Data/Tract_UA_Atlanta_individual.shp") %>%
+  rename("tract_id"=tractid) %>%
+  left_join(tractdata_means_cluster) %>%
+  distinct()
+ggplot(tract_map) + geom_sf(aes(fill=cluster))
+```
